@@ -13,7 +13,7 @@ import { formatGameDate } from "@/utils/date";
 import { tableRowStyles } from "@/styles/table";
 import { EditGameDialog } from "./EditGameDialog";
 
-type AdminGameHistoryRowProps = {
+type GameHistoryRowAdminProps = {
   game: Game;
   players: Record<string, Player>;
   onDelete: (gameId: string) => Promise<void>;
@@ -54,7 +54,7 @@ const PlayerList: FC<PlayerListProps> = ({ players, playerMap }) => (
   </Box>
 );
 
-export const AdminGameHistoryRow: FC<AdminGameHistoryRowProps> = ({
+export const GameHistoryRowAdmin: FC<GameHistoryRowAdminProps> = ({
   game,
   players,
   onDelete,

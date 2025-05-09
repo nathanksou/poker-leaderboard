@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useGameData } from "@/hooks/useGameData";
-import { PlayerManagement } from "./PlayerManagement";
+import { PlayerManagement } from "../player/PlayerManagement";
 import { validateGame } from "@/utils/validation";
 import { ValidationError, GameFormData } from "@/types";
 
