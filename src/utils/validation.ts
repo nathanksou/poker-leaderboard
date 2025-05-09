@@ -1,4 +1,4 @@
-import { ValidationError, PlayerFormData, GameFormData } from "@/types";
+import { ValidationError, GameFormData } from "@/types";
 
 export const validateGame = (data: GameFormData): ValidationError[] => {
   const errors: ValidationError[] = [];
