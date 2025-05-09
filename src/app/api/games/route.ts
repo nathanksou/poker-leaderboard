@@ -1,15 +1,24 @@
 import { NextResponse } from "next/server";
 import { readData } from "@/lib/storage";
+import { Game, ErrorResponse } from "@/types";
 
 export async function GET() {
   try {
     const data = await readData();
-    return NextResponse.json(data.games);
+
+    if (!Array.isArray(data.games)) {
+      throw new Error("Invalid games data format");
+    }
+
+    const games = data.games.map((game: Game) => ({
+      ...game,
+      date: new Date(game.date).toISOString(),
+    }));
+
+    return NextResponse.json(games);
   } catch (error) {
     console.error("Error fetching games:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch games" },
-      { status: 500 }
-    );
+    const errorResponse: ErrorResponse = { error: "Failed to fetch games" };
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 }

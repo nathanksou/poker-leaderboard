@@ -1,20 +1,16 @@
 import React from "react";
-import { TableCell, TableRow, TableSortLabel } from "@mui/material";
-import { GOLD_COLOR } from "@/utils/leaderboard";
-import { headerCellStyles, headerRowStyles } from "@/utils/table";
+import { TableCell, TableRow, TableSortLabel, TableHead } from "@mui/material";
 import { SortField, SortOrder } from "@/types";
+import {
+  headerCellStyles,
+  headerRowStyles,
+  sortLabelStyle,
+} from "@/styles/table";
 
 type LeaderboardTableHeaderProps = {
   orderBy: SortField;
   order: SortOrder;
   onSort: (property: SortField) => void;
-};
-
-const sortLabelStyle = {
-  color: "white",
-  "&:hover": { color: GOLD_COLOR },
-  "&.Mui-active": { color: GOLD_COLOR },
-  "& .MuiTableSortLabel-icon": { color: "white !important" },
 };
 
 const columns: Array<{ field: SortField; label: string }> = [
@@ -31,20 +27,27 @@ export const LeaderboardTableHeader: React.FC<LeaderboardTableHeaderProps> = ({
   onSort,
 }) => {
   return (
-    <TableRow sx={headerRowStyles}>
-      <TableCell sx={headerCellStyles}>Player</TableCell>
-      {columns.map(({ field, label }) => (
-        <TableCell key={field} align="right" sx={headerCellStyles}>
-          <TableSortLabel
-            active={orderBy === field}
-            direction={orderBy === field ? order : "desc"}
-            onClick={() => onSort(field)}
-            sx={sortLabelStyle}
-          >
-            {label}
-          </TableSortLabel>
+    <TableHead>
+      <TableRow sx={headerRowStyles}>
+        <TableCell sx={headerCellStyles} align="center">
+          Rank
         </TableCell>
-      ))}
-    </TableRow>
+        <TableCell sx={headerCellStyles} align="center">
+          Player
+        </TableCell>
+        {columns.map(({ field, label }) => (
+          <TableCell key={field} align="center" sx={headerCellStyles}>
+            <TableSortLabel
+              active={orderBy === field}
+              direction={orderBy === field ? order : "desc"}
+              onClick={() => onSort(field)}
+              sx={sortLabelStyle}
+            >
+              {label}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
   );
 };

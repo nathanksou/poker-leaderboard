@@ -38,6 +38,10 @@ export type SortField =
   | "buyIns"
   | "performance";
 
+export type ErrorResponse = {
+  error: string;
+};
+
 // Component Props Types
 export type PageLayoutProps = {
   title: string;
@@ -67,4 +71,25 @@ export type LeaderboardPlayerRowProps = {
 export type GameHistoryRowProps = {
   game: Game;
   players?: Record<string, Player>;
+};
+
+// Component-specific types
+export type PlayerNameProps = {
+  slackId: string;
+  players: Record<string, Player>;
+  icon?: ReactNode;
+};
+
+export type PlayerListProps = {
+  players: GamePlayer[];
+  playerMap: Record<string, Player>;
+};
+
+export type ErrorBoundaryProps = {
+  children: ReactNode;
+};
+
+export type ErrorBoundaryState = {
+  hasError: boolean;
+  error?: Error;
 };

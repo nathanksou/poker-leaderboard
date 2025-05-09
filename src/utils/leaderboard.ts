@@ -1,33 +1,66 @@
 import { Player } from "@/types";
 
-export const GOLD_COLOR = "#FFDD00";
-export const SILVER_COLOR = "#C0C0C0";
-export const BRONZE_COLOR = "#CD7F32";
+export const COLORS = {
+  GOLD: "#FFDD00",
+  SILVER: "#C0C0C0",
+  BRONZE: "#CD7F32",
+  DEFAULT: "inherit",
+} as const;
 
-export const calculateScore = (player: Player) => {
-  const winPoints = player.firstPlace * 5 + player.secondPlace * 2;
-  const totalPoints = winPoints - player.buyIns * 0.5;
+const SCORE_MULTIPLIERS = {
+  FIRST_PLACE: 5,
+  SECOND_PLACE: 2,
+  BUY_IN: 0.5,
+} as const;
+
+/**
+ * Calculates a player's performance score based on their game statistics.
+ * Score = (Win Points - Buy-in Points) / Games Played
+ * Win Points = (First Place * 5) + (Second Place * 2)
+ * Buy-in Points = Buy-ins * 0.5
+ *
+ * @param player - The player to calculate the score for
+ * @returns The calculated performance score
+ */
+export const calculateScore = (player: Player): number => {
+  if (player.gamesPlayed === 0) return 0;
+
+  const winPoints =
+    player.firstPlace * SCORE_MULTIPLIERS.FIRST_PLACE +
+    player.secondPlace * SCORE_MULTIPLIERS.SECOND_PLACE;
+  const totalPoints = winPoints - player.buyIns * SCORE_MULTIPLIERS.BUY_IN;
   return totalPoints / player.gamesPlayed;
 };
 
-export const getPlayerRank = (player: Player, allPlayers: Player[]) => {
-  const sortedByScore = [...allPlayers].sort(
-    (a, b) => calculateScore(b) - calculateScore(a)
-  );
-  return sortedByScore.findIndex((p) => p.slackId === player.slackId);
+/**
+ * Formats a score to 2 decimal places
+ */
+export const formatScore = (score: number): string => {
+  return score.toFixed(2);
 };
 
-export const formatScore = (score: number) => `${(score * 100).toFixed(1)}%`;
-
-export const getScoreColor = (rank: number) => {
+/**
+ * Gets the color for a player's score based on their rank
+ */
+export const getScoreColor = (rank: number): string => {
   switch (rank) {
     case 0:
-      return GOLD_COLOR;
+      return COLORS.GOLD;
     case 1:
-      return SILVER_COLOR;
+      return COLORS.SILVER;
     case 2:
-      return BRONZE_COLOR;
+      return COLORS.BRONZE;
     default:
-      return "inherit";
+      return COLORS.DEFAULT;
   }
+};
+
+/**
+ * Gets a player's rank in the leaderboard
+ */
+export const getPlayerRank = (player: Player, allPlayers: Player[]): number => {
+  return allPlayers
+    .map((p) => calculateScore(p))
+    .sort((a, b) => b - a)
+    .indexOf(calculateScore(player));
 };

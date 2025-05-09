@@ -3,22 +3,54 @@
 import React from "react";
 import { Leaderboard } from "@/components/Leaderboard";
 import { GameHistory } from "@/components/GameHistory";
-import { PlayerStats, Game, Player } from "@/types";
+import { Game, Player } from "@/types";
 import { Box } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { COLORS } from "@/utils/leaderboard";
 
-const GOLD_COLOR = "#FFDD00";
+const TABS = {
+  LEADERBOARD: "leaderboard",
+  HISTORY: "history",
+} as const;
+
+type Tab = (typeof TABS)[keyof typeof TABS];
+
+type TabButtonProps = {
+  label: string;
+  icon: string;
+  isSelected: boolean;
+  onClick: () => void;
+};
+
+const TabButton = ({ label, icon, isSelected, onClick }: TabButtonProps) => (
+  <Box
+    onClick={onClick}
+    sx={{
+      cursor: "pointer",
+      p: 1,
+      borderRadius: 1,
+      background: isSelected ? "white" : "#3d3d3d",
+      transition: "all 0.2s ease-in-out",
+      "&:hover": {
+        background: isSelected ? "white" : "#4d4d4d",
+      },
+      display: "flex",
+      alignItems: "center",
+      gap: 1,
+      color: isSelected ? "black" : "white",
+      fontWeight: isSelected ? "bold" : "normal",
+    }}
+  >
+    {icon} {label}
+  </Box>
+);
 
 async function getPlayers(): Promise<Player[]> {
   const response = await fetch("/api/players");
   if (!response.ok) {
     throw new Error("Failed to fetch players");
   }
-  const players = await response.json();
-  return players.map((player: PlayerStats & { slackId: string }) => ({
-    ...player,
-    lastUpdated: new Date().toISOString(),
-  }));
+  return response.json();
 }
 
 async function getGames(): Promise<Game[]> {
@@ -30,7 +62,7 @@ async function getGames(): Promise<Game[]> {
 }
 
 export default function Home() {
-  const [selectedTab, setSelectedTab] = React.useState("leaderboard");
+  const [selectedTab, setSelectedTab] = React.useState<Tab>(TABS.LEADERBOARD);
 
   const { data: players, error: playersError } = useQuery({
     queryKey: ["players"],
@@ -42,7 +74,6 @@ export default function Home() {
     queryFn: getGames,
   });
 
-  // Transform players array into a record object
   const playersRecord = React.useMemo(() => {
     return (players || []).reduce<Record<string, Player>>((acc, player) => {
       acc[player.slackId] = player;
@@ -69,7 +100,7 @@ export default function Home() {
   }
 
   if (!players || !games) {
-    return null; // This will show the loading.tsx component
+    return null;
   }
 
   return (
@@ -80,7 +111,7 @@ export default function Home() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        background: GOLD_COLOR,
+        background: COLORS.GOLD,
         py: 4,
       }}
     >
@@ -93,52 +124,24 @@ export default function Home() {
             justifyContent: "flex-end",
           }}
         >
-          <Box
-            onClick={() => setSelectedTab("leaderboard")}
-            sx={{
-              cursor: "pointer",
-              p: 1,
-              borderRadius: 1,
-              background: selectedTab === "leaderboard" ? "white" : "#3d3d3d",
-              transition: "all 0.2s ease-in-out",
-              "&:hover": {
-                background: selectedTab === "leaderboard" ? "white" : "#4d4d4d",
-              },
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              color: selectedTab === "leaderboard" ? "black" : "white",
-              fontWeight: selectedTab === "leaderboard" ? "bold" : "normal",
-            }}
-          >
-            🏆 Leaderboard
-          </Box>
-          <Box
-            onClick={() => setSelectedTab("history")}
-            sx={{
-              cursor: "pointer",
-              p: 1,
-              borderRadius: 1,
-              background: selectedTab === "history" ? "white" : "#3d3d3d",
-              transition: "all 0.2s ease-in-out",
-              "&:hover": {
-                background: selectedTab === "history" ? "white" : "#4d4d4d",
-              },
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              color: selectedTab === "history" ? "black" : "white",
-              fontWeight: selectedTab === "history" ? "bold" : "normal",
-            }}
-          >
-            📜 History
-          </Box>
+          <TabButton
+            label="Leaderboard"
+            icon="🏆"
+            isSelected={selectedTab === TABS.LEADERBOARD}
+            onClick={() => setSelectedTab(TABS.LEADERBOARD)}
+          />
+          <TabButton
+            label="History"
+            icon="📜"
+            isSelected={selectedTab === TABS.HISTORY}
+            onClick={() => setSelectedTab(TABS.HISTORY)}
+          />
         </Box>
 
-        {selectedTab === "leaderboard" ? (
-          <Leaderboard players={players || []} />
+        {selectedTab === TABS.LEADERBOARD ? (
+          <Leaderboard players={players} />
         ) : (
-          <GameHistory games={games || []} players={playersRecord} />
+          <GameHistory games={games} players={playersRecord} />
         )}
       </Box>
     </Box>

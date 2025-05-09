@@ -1,59 +1,42 @@
 import React from "react";
-import { TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow, Box } from "@mui/material";
 import { LeaderboardPlayerRowProps } from "@/types";
 import {
   calculateScore,
   formatScore,
   getScoreColor,
-  GOLD_COLOR,
-  SILVER_COLOR,
-  BRONZE_COLOR,
 } from "@/utils/leaderboard";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import StarIcon from "@mui/icons-material/Star";
-import { tableRowStyles } from "@/utils/table";
+import { tableRowStyles } from "@/styles/table";
 
-const playerCellStyles = {
-  fontWeight: "bold",
+const scoreCellStyles = {
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   gap: 1,
 };
 
-const getRankIcon = (rank: number) => {
-  switch (rank) {
-    case 0:
-      return <EmojiEventsIcon sx={{ color: GOLD_COLOR }} />;
-    case 1:
-      return <StarIcon sx={{ color: SILVER_COLOR }} />;
-    case 2:
-      return <StarIcon sx={{ color: BRONZE_COLOR }} />;
-    default:
-      return null;
-  }
-};
-
-export const LeaderboardPlayerRow: React.FC<LeaderboardPlayerRowProps> = ({
+export const LeaderboardPlayerRow = ({
   player,
   rank,
-}) => {
+}: LeaderboardPlayerRowProps) => {
   const score = calculateScore(player);
+  const scoreColor = getScoreColor(rank);
 
   return (
     <TableRow sx={tableRowStyles}>
-      <TableCell component="th" scope="row" sx={playerCellStyles}>
-        {getRankIcon(rank)}
-        {player.name}
-      </TableCell>
-      <TableCell align="right">{player.gamesPlayed}</TableCell>
-      <TableCell align="right">{player.firstPlace}</TableCell>
-      <TableCell align="right">{player.secondPlace}</TableCell>
-      <TableCell align="right">{player.buyIns}</TableCell>
-      <TableCell
-        align="right"
-        sx={{ fontWeight: "bold", color: getScoreColor(rank) }}
-      >
-        {formatScore(score)}
+      <TableCell align="center">{rank + 1}</TableCell>
+      <TableCell align="center">{player.name}</TableCell>
+      <TableCell align="center">{player.gamesPlayed}</TableCell>
+      <TableCell align="center">{player.firstPlace}</TableCell>
+      <TableCell align="center">{player.secondPlace}</TableCell>
+      <TableCell align="center">{player.buyIns}</TableCell>
+      <TableCell align="center" sx={{ color: scoreColor }}>
+        <Box sx={scoreCellStyles}>
+          {rank < 3 ? <EmojiEventsIcon /> : <StarIcon />}
+          {formatScore(score)}
+        </Box>
       </TableCell>
     </TableRow>
   );

@@ -4,7 +4,7 @@ import { GameHistoryProps } from "@/types";
 import { GameHistoryTableHeader } from "./GameHistoryTableHeader";
 import { GameHistoryRow } from "./GameHistoryRow";
 import { PageLayout } from "./PageLayout";
-import { tableContainerStyles } from "@/utils/table";
+import { tableContainerStyles } from "@/styles/table";
 import { compareDates } from "@/utils/sorting";
 
 export const GameHistory: FC<GameHistoryProps> = ({ games, players }) => {
