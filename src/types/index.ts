@@ -48,9 +48,9 @@ export type ErrorResponse = {
 };
 
 // Component Props Types
-export type PageLayoutProps = {
+export type PageHeaderProps = {
   title: string;
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 export type LeaderboardProps = {

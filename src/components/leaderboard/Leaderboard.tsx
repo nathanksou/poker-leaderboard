@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { LeaderboardTableHeader } from "./LeaderboardTableHeader";
 import { LeaderboardPlayerRow } from "./LeaderboardPlayerRow";
-import { PageLayout } from "@/components";
+import { PageHeader } from "@/components";
 import { tableContainerStyles } from "@/styles/table";
 import { useSorting } from "@/hooks/useSorting";
 import { useGameData } from "@/hooks/useGameData";
@@ -44,26 +44,26 @@ export const Leaderboard: FC = () => {
 
   if (isLoading) {
     return (
-      <PageLayout title="Poker Leaderboard">
+      <PageHeader title="Poker Leaderboard">
         <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
           <CircularProgress />
         </Box>
-      </PageLayout>
+      </PageHeader>
     );
   }
 
   if (isError) {
     return (
-      <PageLayout title="Poker Leaderboard">
+      <PageHeader title="Poker Leaderboard">
         <Alert severity="error">
           {error?.message || "An error occurred while loading the leaderboard"}
         </Alert>
-      </PageLayout>
+      </PageHeader>
     );
   }
 
   return (
-    <PageLayout title="Poker Leaderboard">
+    <PageHeader title="Poker Leaderboard">
       <TableContainer component={Paper} sx={tableContainerStyles}>
         <Table>
           <LeaderboardTableHeader
@@ -82,6 +82,6 @@ export const Leaderboard: FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </PageLayout>
+    </PageHeader>
   );
 };

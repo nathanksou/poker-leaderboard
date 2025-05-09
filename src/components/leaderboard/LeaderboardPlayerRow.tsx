@@ -1,11 +1,8 @@
 import React from "react";
 import { TableCell, TableRow, Box } from "@mui/material";
 import { LeaderboardPlayerRowProps } from "@/types";
-import {
-  calculateScore,
-  formatScore,
-  getScoreColor,
-} from "@/utils/leaderboard";
+import { calculateScore, formatScore } from "@/utils/scores";
+import { getScoreColor } from "@/utils/ranking";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import StarIcon from "@mui/icons-material/Star";
 import { tableRowStyles } from "@/styles/table";

@@ -1,15 +1,15 @@
 import React, { FC } from "react";
 import { Box, Typography } from "@mui/material";
 import CasinoIcon from "@mui/icons-material/Casino";
-import { PageLayoutProps } from "@/types";
+import { PageHeaderProps } from "@/types";
 import {
   containerStyles,
   headerStyles,
   titleStyles,
   iconStyles,
-} from "@/styles/pageLayout";
+} from "@/styles/pageHeader";
 
-export const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
+export const PageHeader: FC<PageHeaderProps> = ({ title, children }) => {
   return (
     <Box sx={containerStyles}>
       <Box sx={headerStyles}>

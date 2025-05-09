@@ -1,5 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
-import { COLORS } from "@/utils/leaderboard";
+import { COLORS } from "@/styles/colors";
 
 export const TABLE_COLORS = {
   BACKGROUND: {

@@ -15,7 +15,7 @@ import {
 import { useGameData } from "@/hooks/useGameData";
 import { GameHistoryRow } from "./GameHistoryRow";
 import { compareDates } from "@/utils/sorting";
-import { PageLayout } from "@/components";
+import { PageHeader } from "@/components";
 import {
   tableContainerStyles,
   headerCellStyles,
@@ -36,36 +36,36 @@ export const GameHistory: FC<GameHistoryProps> = ({ isAdmin = false }) => {
 
   if (isLoading) {
     return (
-      <PageLayout title={isAdmin ? "Game History Admin" : "Game History"}>
+      <PageHeader title="Game History">
         <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
           <CircularProgress />
         </Box>
-      </PageLayout>
+      </PageHeader>
     );
   }
 
   if (error) {
     return (
-      <PageLayout title={isAdmin ? "Game History Admin" : "Game History"}>
+      <PageHeader title="Game History">
         <Alert severity="error">
           {error.message || "An error occurred while loading game history"}
         </Alert>
-      </PageLayout>
+      </PageHeader>
     );
   }
 
   if (!games.length) {
     return (
-      <PageLayout title={isAdmin ? "Game History Admin" : "Game History"}>
+      <PageHeader title="Game History">
         <Typography variant="body1" sx={{ textAlign: "center", p: 4 }}>
           No games found
         </Typography>
-      </PageLayout>
+      </PageHeader>
     );
   }
 
   return (
-    <PageLayout title={isAdmin ? "Game History Admin" : "Game History"}>
+    <PageHeader title="Game History">
       <TableContainer component={Paper} sx={tableContainerStyles}>
         <Table>
           <TableHead>
@@ -103,6 +103,6 @@ export const GameHistory: FC<GameHistoryProps> = ({ isAdmin = false }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </PageLayout>
+    </PageHeader>
   );
 };

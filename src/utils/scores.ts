@@ -1,12 +1,5 @@
 import { Player } from "@/types";
 
-export const COLORS = {
-  GOLD: "#FFDD00",
-  SILVER: "#C0C0C0",
-  BRONZE: "#CD7F32",
-  DEFAULT: "inherit",
-} as const;
-
 const SCORE_MULTIPLIERS = {
   FIRST_PLACE: 5,
   SECOND_PLACE: 2,
@@ -37,30 +30,4 @@ export const calculateScore = (player: Player): number => {
  */
 export const formatScore = (score: number): string => {
   return score.toFixed(2);
-};
-
-/**
- * Gets the color for a player's score based on their rank
- */
-export const getScoreColor = (rank: number): string => {
-  switch (rank) {
-    case 0:
-      return COLORS.GOLD;
-    case 1:
-      return COLORS.SILVER;
-    case 2:
-      return COLORS.BRONZE;
-    default:
-      return COLORS.DEFAULT;
-  }
-};
-
-/**
- * Gets a player's rank in the leaderboard
- */
-export const getPlayerRank = (player: Player, allPlayers: Player[]): number => {
-  return allPlayers
-    .map((p) => calculateScore(p))
-    .sort((a, b) => b - a)
-    .indexOf(calculateScore(player));
 };
