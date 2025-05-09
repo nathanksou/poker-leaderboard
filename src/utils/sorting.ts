@@ -11,7 +11,7 @@ export const compareValues = <T extends string | number>(
   order: SortOrder
 ): number => {
   if (a === b) return 0;
-  return order === SORT_ORDERS.ASC ? (a > b ? 1 : -1) : b > a ? 1 : -1;
+  return order === SORT_ORDERS.ASC ? (a > b ? 1 : -1) : a > b ? -1 : 1;
 };
 
 export const compareDates = (
@@ -26,6 +26,16 @@ export const compareDates = (
     console.error("Invalid date string in comparison:", { a, b });
     return 0;
   }
+
+  // For debugging
+  console.log("Comparing dates:", {
+    a,
+    b,
+    dateA: dateA.toISOString(),
+    dateB: dateB.toISOString(),
+    order,
+    result: compareValues(dateA.getTime(), dateB.getTime(), order),
+  });
 
   return compareValues(dateA.getTime(), dateB.getTime(), order);
 };

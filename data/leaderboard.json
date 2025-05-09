@@ -39,99 +39,74 @@
   },
   "games": [
     {
-      "date": "2024-03-13T15:30:00.000Z",
-      "players": [
-        {
-          "slackId": "U1234567890",
-          "buyIns": 2
-        },
-        {
-          "slackId": "U2345678901",
-          "buyIns": 1
-        },
-        {
-          "slackId": "U3456789012",
-          "buyIns": 1
-        }
-      ],
-      "firstPlace": "U1234567890",
-      "secondPlace": "U2345678901"
-    },
-    {
+      "id": "game-1",
       "date": "2024-03-14T15:30:00.000Z",
       "players": [
         {
           "slackId": "U2345678901",
-          "buyIns": 1
+          "buyIns": 1,
+          "placement": "first"
         },
         {
           "slackId": "U1234567890",
-          "buyIns": 2
+          "buyIns": 2,
+          "placement": "second"
         },
         {
           "slackId": "U4567890123",
-          "buyIns": 1
+          "buyIns": 1,
+          "placement": "other"
         }
       ],
       "firstPlace": "U2345678901",
       "secondPlace": "U1234567890"
     },
     {
+      "id": "game-2",
       "date": "2024-03-15T15:30:00.000Z",
       "players": [
         {
           "slackId": "U3456789012",
-          "buyIns": 2
+          "buyIns": 2,
+          "placement": "first"
         },
         {
           "slackId": "U4567890123",
-          "buyIns": 1
+          "buyIns": 1,
+          "placement": "second"
         },
         {
           "slackId": "U1234567890",
-          "buyIns": 1
+          "buyIns": 1,
+          "placement": "other"
         }
       ],
       "firstPlace": "U3456789012",
       "secondPlace": "U4567890123"
     },
     {
-      "date": "2024-03-16T15:30:00.000Z",
-      "players": [
-        {
-          "slackId": "U4567890123",
-          "buyIns": 1
-        },
-        {
-          "slackId": "U2345678901",
-          "buyIns": 2
-        },
-        {
-          "slackId": "U3456789012",
-          "buyIns": 1
-        }
-      ],
-      "firstPlace": "U4567890123",
-      "secondPlace": "U2345678901"
-    },
-    {
-      "date": "2024-03-21T02:30:00.000+11:00",
+      "id": "game-4",
+      "date": "2024-03-19T17:30:00.000Z",
       "players": [
         {
           "slackId": "U1234567890",
-          "buyIns": 2
+          "buyIns": 3,
+          "placement": "first"
         },
         {
           "slackId": "U2345678901",
-          "buyIns": 1
+          "buyIns": 4,
+          "placement": "second"
         },
         {
           "slackId": "U3456789012",
-          "buyIns": 1
+          "buyIns": 1,
+          "placement": "other"
         },
         {
           "slackId": "U4567890123",
-          "buyIns": 2
+          "buyIns": 2,
+          "placement": "other"
         }
       ],
       "firstPlace": "U1234567890",

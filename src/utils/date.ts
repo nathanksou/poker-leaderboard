@@ -1,11 +1,7 @@
 const DATE_FORMAT_OPTIONS = {
-  weekday: "short",
-  year: "numeric",
-  month: "short",
   day: "numeric",
-  hour: "numeric",
-  minute: "numeric",
-  hour12: true,
+  month: "short",
+  year: "numeric",
   timeZone: "Australia/Sydney",
 } as const;
 

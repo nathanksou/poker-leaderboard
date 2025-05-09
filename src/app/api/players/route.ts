@@ -5,18 +5,7 @@ import { ErrorResponse } from "@/types";
 export async function GET() {
   try {
     const data = await readData();
-    const players = Object.entries(data.players).map(
-      ([slackId, { name, gamesPlayed, firstPlace, secondPlace, buyIns }]) => ({
-        slackId,
-        name,
-        gamesPlayed,
-        firstPlace,
-        secondPlace,
-        buyIns,
-      })
-    );
-
-    return NextResponse.json(players);
+    return NextResponse.json(data.players);
   } catch (error) {
     console.error("Error fetching players:", error);
     const errorResponse: ErrorResponse = { error: "Failed to fetch players" };

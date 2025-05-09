@@ -10,13 +10,18 @@ export type Player = {
   lastUpdated: string;
 };
 
-export type GamePlayer = Pick<Player, "slackId" | "buyIns">;
+export type GamePlayer = {
+  slackId: string;
+  buyIns: number;
+  placement: "first" | "second" | "other";
+};
 
 export type Game = {
+  id: string;
   date: string;
-  players: GamePlayer[];
   firstPlace: string;
   secondPlace: string;
+  players: GamePlayer[];
 };
 
 export type LeaderboardData = {
@@ -92,4 +97,20 @@ export type ErrorBoundaryProps = {
 export type ErrorBoundaryState = {
   hasError: boolean;
   error?: Error;
+};
+
+export type ValidationError = {
+  field: string;
+  message: string;
+};
+
+export type PlayerFormData = {
+  slackId: string;
+  buyIns: number;
+};
+
+export type GameFormData = {
+  firstPlace: string;
+  secondPlace: string;
+  players: PlayerFormData[];
 };
