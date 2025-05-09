@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Poker Leaderboard Slack App
 
-## Getting Started
+A Slack application that tracks poker game results and displays a leaderboard.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Track poker game results with first and second place winners
+- Record buy-ins for each player in each game
+- Display a leaderboard showing:
+  - Number of games played
+  - Number of first place wins
+  - Number of second place wins
+  - Number of buy-ins
+- Web interface to view the leaderboard
+- Slack commands for easy interaction
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository
+2. Install dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. Set up environment variables:
+   Create a `.env` file with the following variables:
 
-To learn more about Next.js, take a look at the following resources:
+   ```
+   SLACK_BOT_TOKEN="xoxb-your-bot-token"
+   SLACK_SIGNING_SECRET="your-signing-secret"
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Create a Slack app at https://api.slack.com/apps
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   - Add the following bot token scopes:
+     - `commands`
+     - `chat:write`
+     - `users:read` (to get player names)
+   - Create three slash commands:
+     - `/poker-leaderboard`: Shows the current leaderboard
+     - `/poker-game`: Records a game result
+     - `/poker-buyins`: Updates buy-ins for the last game
 
-## Deploy on Vercel
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Slack Commands
+
+1. View the leaderboard:
+
+   ```
+   /poker-leaderboard
+   ```
+
+2. Record a game result:
+
+   ```
+   /poker-game @winner @second buyins:@player1=2 @player2=1 @player3=3
+   ```
+
+   - First two mentions are required (winner and runner-up)
+   - Buy-ins are optional, default is 1 per player
+   - Example: `/poker-game @john @jane buyins:@john=2 @jane=1 @bob=3`
+
+3. Update buy-ins for the last game:
+   ```
+   /poker-buyins @player 2
+   ```
+   - Updates the number of buy-ins for a player in the most recent game
+   - Can only modify the most recent game for safety
+
+### Web Interface
+
+Visit `http://localhost:3000` to view the leaderboard in your browser.
+
+## Development
+
+- Built with Next.js and TypeScript
+- Uses Material-UI for the web interface
+- Slack Bolt framework for Slack integration
+- Data stored in a JSON file for simplicity
+
+## License
+
+MIT
