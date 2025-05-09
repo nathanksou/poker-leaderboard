@@ -3,18 +3,22 @@
 import React from "react";
 import { Leaderboard } from "@/components/Leaderboard";
 import { GameHistory } from "@/components/GameHistory";
-import { PlayerStats, Game } from "@/types";
+import { PlayerStats, Game, Player } from "@/types";
 import { Box } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 const GOLD_COLOR = "#FFDD00";
 
-async function getPlayers(): Promise<PlayerStats[]> {
+async function getPlayers(): Promise<Player[]> {
   const response = await fetch("/api/players");
   if (!response.ok) {
     throw new Error("Failed to fetch players");
   }
-  return response.json();
+  const players = await response.json();
+  return players.map((player: PlayerStats & { slackId: string }) => ({
+    ...player,
+    lastUpdated: new Date().toISOString(),
+  }));
 }
 
 async function getGames(): Promise<Game[]> {
@@ -37,6 +41,14 @@ export default function Home() {
     queryKey: ["games"],
     queryFn: getGames,
   });
+
+  // Transform players array into a record object
+  const playersRecord = React.useMemo(() => {
+    return (players || []).reduce<Record<string, Player>>((acc, player) => {
+      acc[player.slackId] = player;
+      return acc;
+    }, {});
+  }, [players]);
 
   const error = playersError || gamesError;
 
@@ -126,7 +138,7 @@ export default function Home() {
         {selectedTab === "leaderboard" ? (
           <Leaderboard players={players || []} />
         ) : (
-          <GameHistory games={games || []} />
+          <GameHistory games={games || []} players={playersRecord} />
         )}
       </Box>
     </Box>
