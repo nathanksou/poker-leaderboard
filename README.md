@@ -1,90 +1,112 @@
-# Poker Leaderboard Slack App
+# Poker Leaderboard
 
-A Slack application that tracks poker game results and displays a leaderboard.
+A web application for tracking poker game results and player statistics. Built with Next.js, TypeScript, and Material-UI.
 
 ## Features
 
-- Track poker game results with first and second place winners
-- Record buy-ins for each player in each game
-- Display a leaderboard showing:
-  - Number of games played
-  - Number of first place wins
-  - Number of second place wins
-  - Number of buy-ins
-- Web interface to view the leaderboard
-- Slack commands for easy interaction
+- Track poker game results
+- View player statistics and rankings
+- Admin panel for managing games and players
+- Responsive design for all devices
+- Password-protected admin access
 
-## Setup
+## Tech Stack
 
-1. Clone the repository
+- **Framework**: Next.js 14
+- **Language**: TypeScript
+- **UI Library**: Material-UI (MUI)
+- **State Management**: React Query, Recoil
+- **Styling**: MUI's `sx` prop, styled-components
+- **Data Storage**: Local storage (can be extended to use a database)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18.0 or later
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone git@github.com:nathanksou/poker-leaderboard.git
+   cd poker-leaderboard
+   ```
+
 2. Install dependencies:
 
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-3. Set up environment variables:
-   Create a `.env` file with the following variables:
+3. Create a `.env` file in the root directory:
 
    ```
-   SLACK_BOT_TOKEN="xoxb-your-bot-token"
-   SLACK_SIGNING_SECRET="your-signing-secret"
+   NEXT_PUBLIC_ADMIN_PASSWORD=your_admin_password_here
    ```
 
-4. Create a Slack app at https://api.slack.com/apps
+4. Start the development server:
 
-   - Add the following bot token scopes:
-     - `commands`
-     - `chat:write`
-     - `users:read` (to get player names)
-   - Create three slash commands:
-     - `/poker-leaderboard`: Shows the current leaderboard
-     - `/poker-game`: Records a game result
-     - `/poker-buyins`: Updates buy-ins for the last game
-
-5. Start the development server:
    ```bash
    npm run dev
+   # or
+   yarn dev
    ```
 
-## Usage
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Slack Commands
+## Project Structure
 
-1. View the leaderboard:
-
-   ```
-   /poker-leaderboard
-   ```
-
-2. Record a game result:
-
-   ```
-   /poker-game @winner @second buyins:@player1=2 @player2=1 @player3=3
-   ```
-
-   - First two mentions are required (winner and runner-up)
-   - Buy-ins are optional, default is 1 per player
-   - Example: `/poker-game @john @jane buyins:@john=2 @jane=1 @bob=3`
-
-3. Update buy-ins for the last game:
-   ```
-   /poker-buyins @player 2
-   ```
-   - Updates the number of buy-ins for a player in the most recent game
-   - Can only modify the most recent game for safety
-
-### Web Interface
-
-Visit `http://localhost:3000` to view the leaderboard in your browser.
+```
+src/
+├── app/              # Next.js app directory
+├── components/       # React components
+│   ├── admin/       # Admin-related components
+│   ├── gamehistory/ # Game history components
+│   ├── layout/      # Layout components
+│   └── player/      # Player-related components
+├── hooks/           # Custom React hooks
+├── lib/             # Utility functions and configurations
+├── styles/          # Global styles and theme
+└── types/           # TypeScript type definitions
+```
 
 ## Development
 
-- Built with Next.js and TypeScript
-- Uses Material-UI for the web interface
-- Slack Bolt framework for Slack integration
-- Data stored in a JSON file for simplicity
+### Code Style
+
+- Follow TypeScript best practices
+- Use functional components with hooks
+- Implement proper error handling
+- Write meaningful comments
+- Follow the established component structure
+
+### Component Guidelines
+
+- Use TypeScript for all components
+- Implement proper prop typing
+- Use MUI components for UI elements
+- Follow responsive design principles
+- Implement error boundaries where needed
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Material-UI for the component library
+- Next.js team for the amazing framework
+- All contributors who help improve this project
