@@ -3,10 +3,10 @@ import { TABLE_COLORS } from "./table";
 
 export const tabButtonStyles: SxProps<Theme> = {
   color: (theme) => theme.palette.text.primary,
-  bgcolor: TABLE_COLORS.BACKGROUND.HEADER,
+  bgcolor: "#2d2d2d",
   borderRadius: 2,
   "&:hover": {
-    bgcolor: TABLE_COLORS.BACKGROUND.HEADER,
+    bgcolor: "#2d2d2d",
   },
 };
 

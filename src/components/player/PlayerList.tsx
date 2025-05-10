@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Box, Chip, Tooltip } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { GamePlayer, Player } from "@/types";
 
 type PlayerListProps = {
@@ -13,17 +13,12 @@ export const PlayerList: FC<PlayerListProps> = ({ players, playerMap }) => {
       {players.map((player) => {
         const playerInfo = playerMap[player.slackId];
         return (
-          <Tooltip
+          <Chip
             key={player.slackId}
-            title={`Buy-ins: ${player.buyIns}`}
-            arrow
-          >
-            <Chip
-              label={playerInfo?.name || "Unknown Player"}
-              size="small"
-              variant="outlined"
-            />
-          </Tooltip>
+            label={`${playerInfo?.name || "Unknown Player"}: ${player.buyIns}`}
+            size="small"
+            variant="outlined"
+          />
         );
       })}
     </Box>
