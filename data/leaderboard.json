@@ -39,23 +39,23 @@
   },
   "games": [
     {
-      "id": "game_1746855124793",
-      "date": "2025-05-10T05:32:04.793Z",
-      "firstPlace": "U2345678901",
-      "secondPlace": "U3456789012",
+      "id": "game_1746858514468",
+      "date": "2025-05-10T06:28:34.468Z",
+      "firstPlace": "U4567890123",
+      "secondPlace": "U2345678901",
       "players": [
         {
-          "slackId": "U2345678901",
+          "slackId": "U4567890123",
           "buyIns": 1,
           "placement": "first"
         },
         {
-          "slackId": "U3456789012",
-          "buyIns": 2,
+          "slackId": "U2345678901",
+          "buyIns": 1,
           "placement": "second"
         },
         {
-          "slackId": "U4567890123",
+          "slackId": "U1234567890",
           "buyIns": 1,
           "placement": "other"
         }
