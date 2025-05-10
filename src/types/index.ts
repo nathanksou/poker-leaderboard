@@ -112,5 +112,8 @@ export type PlayerFormData = {
 export type GameFormData = {
   firstPlace: string;
   secondPlace: string;
-  players: PlayerFormData[];
+  players: Array<{
+    slackId: string;
+    buyIns: number;
+  }>;
 };

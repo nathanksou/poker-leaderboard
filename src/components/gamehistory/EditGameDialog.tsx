@@ -12,6 +12,11 @@ import { useGameData } from "@/hooks/useGameData";
 import { PlayerManagement } from "../player/PlayerManagement";
 import { validateGame } from "@/utils/validation";
 import { ValidationError, GameFormData } from "@/types";
+import {
+  dialogButtonStyles,
+  dialogTitleStyles,
+  dialogContentStyles,
+} from "@/styles/dialog";
 
 type EditGameDialogProps = {
   open: boolean;
@@ -54,9 +59,9 @@ export const EditGameDialog: FC<EditGameDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Edit Game</DialogTitle>
+      <DialogTitle sx={dialogTitleStyles}>Edit Game</DialogTitle>
       <DialogContent>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+        <Box sx={dialogContentStyles}>
           {(apiError || validationErrors.length > 0) && (
             <Alert severity="error">
               {apiError?.message || "Please fix the validation errors below"}
@@ -74,8 +79,15 @@ export const EditGameDialog: FC<EditGameDialogProps> = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained" disabled={isLoading}>
+        <Button onClick={onClose} sx={dialogButtonStyles}>
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          disabled={isLoading}
+          sx={dialogButtonStyles}
+        >
           {isLoading ? "Saving..." : "Save Changes"}
         </Button>
       </DialogActions>

@@ -111,6 +111,29 @@
       ],
       "firstPlace": "U1234567890",
       "secondPlace": "U2345678901"
+    },
+    {
+      "id": "game_1746853483384",
+      "date": "2025-05-10T05:04:43.384Z",
+      "firstPlace": "U2345678901",
+      "secondPlace": "U1234567890",
+      "players": [
+        {
+          "slackId": "U3456789012",
+          "buyIns": 1,
+          "placement": "other"
+        },
+        {
+          "slackId": "U2345678901",
+          "buyIns": 1,
+          "placement": "first"
+        },
+        {
+          "slackId": "U1234567890",
+          "buyIns": 1,
+          "placement": "second"
+        }
+      ]
     }
   ]
 }

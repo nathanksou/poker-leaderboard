@@ -10,6 +10,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Player, ValidationError } from "@/types";
+import { dialogSecondaryButtonStyles } from "@/styles/dialog";
 
 type PlayerFormData = {
   slackId: string;
@@ -21,6 +22,7 @@ type PlayerManagementProps = {
   gamePlayers: PlayerFormData[];
   onPlayersChange: (players: PlayerFormData[]) => void;
   validationErrors: ValidationError[];
+  selectedPlayers: string[];
 };
 
 export const PlayerManagement: FC<PlayerManagementProps> = ({
@@ -28,6 +30,7 @@ export const PlayerManagement: FC<PlayerManagementProps> = ({
   gamePlayers,
   onPlayersChange,
   validationErrors,
+  selectedPlayers,
 }) => {
   const handleAddPlayer = () => {
     onPlayersChange([...gamePlayers, { slackId: "", buyIns: 1 }]);
@@ -57,10 +60,23 @@ export const PlayerManagement: FC<PlayerManagementProps> = ({
     return error ? error.message : "";
   };
 
-  const playersArray = Object.entries(players).map(([slackId, player]) => ({
-    slackId,
-    name: player.name,
-  }));
+  const getAvailablePlayers = (currentValue: string) => {
+    const selectedPlayersSet = new Set([
+      ...selectedPlayers,
+      ...gamePlayers.map((p) => p.slackId),
+    ]);
+
+    return Object.entries(players)
+      .map(([slackId, player]) => ({
+        slackId,
+        name: player.name,
+      }))
+      .filter(
+        (player) =>
+          player.slackId === currentValue ||
+          !selectedPlayersSet.has(player.slackId)
+      );
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -81,7 +97,7 @@ export const PlayerManagement: FC<PlayerManagementProps> = ({
               }
               label={`Player ${index + 1}`}
             >
-              {playersArray.map(({ slackId, name }) => (
+              {getAvailablePlayers(player.slackId).map(({ slackId, name }) => (
                 <MenuItem key={slackId} value={slackId}>
                   {name}
                 </MenuItem>
@@ -110,9 +126,8 @@ export const PlayerManagement: FC<PlayerManagementProps> = ({
           {index > 0 && (
             <Button
               variant="outlined"
-              color="error"
               onClick={() => handleRemovePlayer(index)}
-              sx={{ mt: 1 }}
+              sx={{ ...dialogSecondaryButtonStyles, mt: 1 }}
             >
               Remove
             </Button>
@@ -123,7 +138,7 @@ export const PlayerManagement: FC<PlayerManagementProps> = ({
       <Button
         variant="outlined"
         onClick={handleAddPlayer}
-        sx={{ alignSelf: "flex-start" }}
+        sx={{ ...dialogSecondaryButtonStyles, alignSelf: "flex-start" }}
       >
         Add Player
       </Button>

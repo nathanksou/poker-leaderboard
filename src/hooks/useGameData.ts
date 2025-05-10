@@ -28,7 +28,10 @@ export const useGameData = () => {
 
   const addGameMutation = useMutation({
     mutationFn: async (formData: GameFormData) => {
-      const gameData: Omit<Game, "id" | "date"> = {
+      const now = new Date();
+      const gameData: Game = {
+        id: `game_${now.getTime()}`,
+        date: now.toISOString(),
         firstPlace: formData.firstPlace,
         secondPlace: formData.secondPlace,
         players: formData.players.map((player) => ({
@@ -51,7 +54,8 @@ export const useGameData = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add game");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to add game");
       }
 
       return response.json();
@@ -93,7 +97,8 @@ export const useGameData = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to edit game");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to edit game");
       }
 
       return response.json();
@@ -111,7 +116,8 @@ export const useGameData = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete game");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete game");
       }
     },
     onSuccess: () => {
