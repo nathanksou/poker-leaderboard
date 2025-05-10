@@ -11,54 +11,20 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { formatGameDate } from "@/utils/date";
 import { tableRowStyles } from "@/styles/table";
-import { EditGameDialog } from "./EditGameDialog";
+import { GameDialog } from "./GameDialog";
+import { PlayerName } from "../player/PlayerName";
+import { PlayerList } from "../player/PlayerList";
 
 type GameHistoryRowAdminProps = {
   game: Game;
   players: Record<string, Player>;
   onDelete: (gameId: string) => Promise<void>;
-  onEdit: (gameId: string, updatedGame: Game) => Promise<void>;
 };
-
-type PlayerNameProps = {
-  slackId: string;
-  players: Record<string, Player>;
-  icon?: React.ReactNode;
-};
-
-const PlayerName: FC<PlayerNameProps> = ({ slackId, players, icon }) => {
-  const player = players[slackId];
-  const name = player?.name || slackId;
-
-  return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      {icon}
-      {name}
-    </Box>
-  );
-};
-
-type PlayerListProps = {
-  players: Game["players"];
-  playerMap: Record<string, Player>;
-};
-
-const PlayerList: FC<PlayerListProps> = ({ players, playerMap }) => (
-  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-    {players.map((player) => (
-      <Box key={player.slackId} sx={{ display: "flex", gap: 1 }}>
-        <PlayerName slackId={player.slackId} players={playerMap} />
-        <Box sx={{ color: "text.secondary" }}>({player.buyIns} buy-ins)</Box>
-      </Box>
-    ))}
-  </Box>
-);
 
 export const GameHistoryRowAdmin: FC<GameHistoryRowAdminProps> = ({
   game,
   players,
   onDelete,
-  onEdit,
 }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -114,12 +80,10 @@ export const GameHistoryRowAdmin: FC<GameHistoryRowAdminProps> = ({
         </TableCell>
       </TableRow>
 
-      <EditGameDialog
+      <GameDialog
         open={isEditDialogOpen}
         onClose={() => setIsEditDialogOpen(false)}
         game={game}
-        players={players}
-        onEdit={onEdit}
       />
     </>
   );

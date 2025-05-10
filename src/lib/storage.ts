@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { LeaderboardData, GamePlayer } from "@/types";
+import { LeaderboardData, GamePlayer, Game } from "@/types";
 
 const DATA_FILE = path.join(process.cwd(), "data", "leaderboard.json");
 
@@ -28,6 +28,7 @@ export async function addGame(
 ): Promise<void> {
   const data = await readData();
   const now = new Date().toISOString();
+  const gameId = `game_${now}`;
 
   // Update players
   players.forEach((player) => {
@@ -55,6 +56,7 @@ export async function addGame(
 
   // Add game
   data.games.push({
+    id: gameId,
     date: now,
     players,
     firstPlace,
@@ -101,6 +103,65 @@ export async function updateLastGameBuyins(
     data.players[slackId].buyIns += buyInDiff;
     data.players[slackId].lastUpdated = new Date().toISOString();
   }
+
+  await writeData(data);
+}
+
+export async function updateGame(
+  gameId: string,
+  updatedGame: Game
+): Promise<void> {
+  const data = await readData();
+  const gameIndex = data.games.findIndex((g) => g.id === gameId);
+
+  if (gameIndex === -1) {
+    throw new Error("Game not found");
+  }
+
+  const oldGame = data.games[gameIndex];
+  const now = new Date().toISOString();
+
+  // Remove old game's impact on player statistics
+  oldGame.players.forEach((player) => {
+    if (data.players[player.slackId]) {
+      const existingPlayer = data.players[player.slackId];
+      existingPlayer.gamesPlayed -= 1;
+      existingPlayer.buyIns -= player.buyIns;
+      if (player.placement === "first") {
+        existingPlayer.firstPlace -= 1;
+      } else if (player.placement === "second") {
+        existingPlayer.secondPlace -= 1;
+      }
+      existingPlayer.lastUpdated = now;
+    }
+  });
+
+  // Add new game's impact on player statistics
+  updatedGame.players.forEach((player) => {
+    const existingPlayer = data.players[player.slackId] || {
+      slackId: player.slackId,
+      name: player.slackId,
+      gamesPlayed: 0,
+      firstPlace: 0,
+      secondPlace: 0,
+      buyIns: 0,
+      lastUpdated: now,
+    };
+
+    existingPlayer.gamesPlayed += 1;
+    existingPlayer.buyIns += player.buyIns;
+    if (player.placement === "first") {
+      existingPlayer.firstPlace += 1;
+    } else if (player.placement === "second") {
+      existingPlayer.secondPlace += 1;
+    }
+    existingPlayer.lastUpdated = now;
+
+    data.players[player.slackId] = existingPlayer;
+  });
+
+  // Update the game
+  data.games[gameIndex] = updatedGame;
 
   await writeData(data);
 }

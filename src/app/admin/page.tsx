@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
-import { GameHistory, AddGameDialog } from "@/components/gamehistory";
+import { GameHistory, GameDialog } from "@/components/gamehistory";
 import AddIcon from "@mui/icons-material/Add";
 import { actionButtonStyles } from "@/styles/tabs";
 import {
@@ -30,7 +30,7 @@ export default function AdminPage() {
 
         <GameHistory isAdmin />
 
-        <AddGameDialog
+        <GameDialog
           open={isAddDialogOpen}
           onClose={() => setIsAddDialogOpen(false)}
         />

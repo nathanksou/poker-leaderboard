@@ -7,7 +7,7 @@
       "firstPlace": 2,
       "secondPlace": 1,
       "buyIns": 7,
-      "lastUpdated": "2024-03-20T15:30:00.000Z"
+      "lastUpdated": "2025-05-10T05:34:01.509Z"
     },
     "U2345678901": {
       "slackId": "U2345678901",
@@ -16,7 +16,7 @@
       "firstPlace": 1,
       "secondPlace": 2,
       "buyIns": 6,
-      "lastUpdated": "2024-03-20T15:30:00.000Z"
+      "lastUpdated": "2025-05-10T05:34:01.509Z"
     },
     "U3456789012": {
       "slackId": "U3456789012",
@@ -25,7 +25,7 @@
       "firstPlace": 1,
       "secondPlace": 0,
       "buyIns": 5,
-      "lastUpdated": "2024-03-20T15:30:00.000Z"
+      "lastUpdated": "2025-05-10T05:34:01.509Z"
     },
     "U4567890123": {
       "slackId": "U4567890123",
@@ -34,104 +34,30 @@
       "firstPlace": 1,
       "secondPlace": 1,
       "buyIns": 4,
-      "lastUpdated": "2024-03-20T15:30:00.000Z"
+      "lastUpdated": "2025-05-10T05:34:01.509Z"
     }
   },
   "games": [
     {
-      "id": "game-1",
-      "date": "2024-03-14T15:30:00.000Z",
-      "players": [
-        {
-          "slackId": "U2345678901",
-          "buyIns": 1,
-          "placement": "first"
-        },
-        {
-          "slackId": "U1234567890",
-          "buyIns": 2,
-          "placement": "second"
-        },
-        {
-          "slackId": "U4567890123",
-          "buyIns": 1,
-          "placement": "other"
-        }
-      ],
+      "id": "game_1746855124793",
+      "date": "2025-05-10T05:32:04.793Z",
       "firstPlace": "U2345678901",
-      "secondPlace": "U1234567890"
-    },
-    {
-      "id": "game-2",
-      "date": "2024-03-15T15:30:00.000Z",
+      "secondPlace": "U3456789012",
       "players": [
-        {
-          "slackId": "U3456789012",
-          "buyIns": 2,
-          "placement": "first"
-        },
-        {
-          "slackId": "U4567890123",
-          "buyIns": 1,
-          "placement": "second"
-        },
-        {
-          "slackId": "U1234567890",
-          "buyIns": 1,
-          "placement": "other"
-        }
-      ],
-      "firstPlace": "U3456789012",
-      "secondPlace": "U4567890123"
-    },
-    {
-      "id": "game-4",
-      "date": "2024-03-19T17:30:00.000Z",
-      "players": [
-        {
-          "slackId": "U1234567890",
-          "buyIns": 3,
-          "placement": "first"
-        },
-        {
-          "slackId": "U2345678901",
-          "buyIns": 4,
-          "placement": "second"
-        },
-        {
-          "slackId": "U3456789012",
-          "buyIns": 1,
-          "placement": "other"
-        },
-        {
-          "slackId": "U4567890123",
-          "buyIns": 2,
-          "placement": "other"
-        }
-      ],
-      "firstPlace": "U1234567890",
-      "secondPlace": "U2345678901"
-    },
-    {
-      "id": "game_1746853483384",
-      "date": "2025-05-10T05:04:43.384Z",
-      "firstPlace": "U2345678901",
-      "secondPlace": "U1234567890",
-      "players": [
-        {
-          "slackId": "U3456789012",
-          "buyIns": 1,
-          "placement": "other"
-        },
         {
           "slackId": "U2345678901",
           "buyIns": 1,
           "placement": "first"
         },
         {
-          "slackId": "U1234567890",
-          "buyIns": 1,
+          "slackId": "U3456789012",
+          "buyIns": 2,
           "placement": "second"
+        },
+        {
+          "slackId": "U4567890123",
+          "buyIns": 1,
+          "placement": "other"
         }
       ]
     }

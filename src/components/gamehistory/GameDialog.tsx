@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -17,20 +17,27 @@ import {
 import { useGameData } from "@/hooks/useGameData";
 import { PlayerManagement } from "../player/PlayerManagement";
 import { validateGame } from "@/utils/validation";
-import { ValidationError, GameFormData, Player } from "@/types";
+import { ValidationError, GameFormData, Game, Player } from "@/types";
 import {
   dialogButtonStyles,
   dialogTitleStyles,
   dialogContentStyles,
 } from "@/styles/dialog";
 
-type AddGameDialogProps = {
+type GameDialogProps = {
   open: boolean;
   onClose: () => void;
+  game?: Game;
 };
 
-export const AddGameDialog: FC<AddGameDialogProps> = ({ open, onClose }) => {
-  const { players, addGame, isLoading, error } = useGameData();
+export const GameDialog: FC<GameDialogProps> = ({ open, onClose, game }) => {
+  const {
+    players,
+    addGame,
+    editGame,
+    isLoading,
+    error: apiError,
+  } = useGameData();
   const [formData, setFormData] = useState<GameFormData>({
     firstPlace: "",
     secondPlace: "",
@@ -42,34 +49,30 @@ export const AddGameDialog: FC<AddGameDialogProps> = ({ open, onClose }) => {
   const [winnerBuyIns, setWinnerBuyIns] = useState<number>(1);
   const [runnerUpBuyIns, setRunnerUpBuyIns] = useState<number>(1);
 
-  const handleSubmit = async () => {
-    // Add winner and runner-up to players list for validation
-    const gamePlayers = [...formData.players];
-    if (
-      formData.firstPlace &&
-      !gamePlayers.some((p) => p.slackId === formData.firstPlace)
-    ) {
-      gamePlayers.push({ slackId: formData.firstPlace, buyIns: winnerBuyIns });
-    }
-    if (
-      formData.secondPlace &&
-      !gamePlayers.some((p) => p.slackId === formData.secondPlace)
-    ) {
-      gamePlayers.push({
-        slackId: formData.secondPlace,
-        buyIns: runnerUpBuyIns,
+  useEffect(() => {
+    if (game) {
+      // Filter out winner and runner-up from the players list
+      const otherPlayers = game.players.filter(
+        (player) =>
+          player.slackId !== game.firstPlace &&
+          player.slackId !== game.secondPlace
+      );
+
+      setFormData({
+        firstPlace: game.firstPlace,
+        secondPlace: game.secondPlace,
+        players: otherPlayers.map(({ slackId, buyIns }) => ({
+          slackId,
+          buyIns,
+        })),
       });
-    }
-
-    const errors = validateGame({ ...formData, players: gamePlayers });
-    if (errors.length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
-
-    try {
-      await addGame({ ...formData, players: gamePlayers });
-      onClose();
+      // Set buy-ins for winner and runner-up
+      const winner = game.players.find((p) => p.slackId === game.firstPlace);
+      const runnerUp = game.players.find((p) => p.slackId === game.secondPlace);
+      setWinnerBuyIns(winner?.buyIns || 1);
+      setRunnerUpBuyIns(runnerUp?.buyIns || 1);
+    } else {
+      // Reset form for new game
       setFormData({
         firstPlace: "",
         secondPlace: "",
@@ -77,9 +80,70 @@ export const AddGameDialog: FC<AddGameDialogProps> = ({ open, onClose }) => {
       });
       setWinnerBuyIns(1);
       setRunnerUpBuyIns(1);
-      setValidationErrors([]);
+    }
+    setValidationErrors([]);
+  }, [game]);
+
+  const handleSubmit = async () => {
+    try {
+      // Start with an empty array and build the complete players list
+      const gamePlayers: GameFormData["players"] = [];
+
+      // Add winner if not already in the list
+      if (formData.firstPlace) {
+        gamePlayers.push({
+          slackId: formData.firstPlace,
+          buyIns: winnerBuyIns,
+        });
+      }
+
+      // Add runner-up if not already in the list
+      if (formData.secondPlace) {
+        gamePlayers.push({
+          slackId: formData.secondPlace,
+          buyIns: runnerUpBuyIns,
+        });
+      }
+
+      // Add other players from the form data
+      formData.players.forEach((player) => {
+        if (
+          player.slackId &&
+          player.slackId !== formData.firstPlace &&
+          player.slackId !== formData.secondPlace
+        ) {
+          gamePlayers.push(player);
+        }
+      });
+
+      // Validate with the complete players list
+      const errors = validateGame({ ...formData, players: gamePlayers });
+      if (errors.length > 0) {
+        setValidationErrors(errors);
+        return;
+      }
+
+      if (game) {
+        console.log("Editing game:", game.id);
+        console.log("Form data:", { ...formData, players: gamePlayers });
+        await editGame({
+          gameId: game.id,
+          formData: { ...formData, players: gamePlayers },
+        });
+      } else {
+        console.log("Adding new game");
+        console.log("Form data:", { ...formData, players: gamePlayers });
+        await addGame({ ...formData, players: gamePlayers });
+      }
+      onClose();
     } catch (err) {
-      console.error("Error adding game:", err);
+      console.error("Error saving game:", err);
+      setValidationErrors([
+        {
+          field: "submit",
+          message: err instanceof Error ? err.message : "Failed to save game",
+        },
+      ]);
     }
   };
 
@@ -122,10 +186,16 @@ export const AddGameDialog: FC<AddGameDialogProps> = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={dialogTitleStyles}>Add New Game</DialogTitle>
+      <DialogTitle sx={dialogTitleStyles}>
+        {game ? "Edit Game" : "Add New Game"}
+      </DialogTitle>
       <DialogContent>
         <Box sx={dialogContentStyles}>
-          {error && <Alert severity="error">{error.message}</Alert>}
+          {(apiError || validationErrors.length > 0) && (
+            <Alert severity="error">
+              {apiError?.message || "Please fix the validation errors below"}
+            </Alert>
+          )}
 
           <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
             <FormControl fullWidth error={!!getFieldError("firstPlace")}>
@@ -224,7 +294,7 @@ export const AddGameDialog: FC<AddGameDialogProps> = ({ open, onClose }) => {
           disabled={isLoading}
           sx={dialogButtonStyles}
         >
-          {isLoading ? "Adding..." : "Add Game"}
+          {isLoading ? "Saving..." : game ? "Save Changes" : "Add Game"}
         </Button>
       </DialogActions>
     </Dialog>

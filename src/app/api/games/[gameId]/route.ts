@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Game } from "@/types";
-import { getGames, saveGames } from "@/utils/games";
+import { getGames, saveGames, updateGame } from "@/utils/games";
 
 export async function PUT(
   request: Request,
@@ -52,26 +52,13 @@ export async function PUT(
       }
     }
 
-    // Get existing games
-    const games = await getGames();
-
-    // Find and update the game by ID
-    const gameIndex = games.findIndex((game) => game.id === gameId);
-
-    if (gameIndex === -1) {
-      return NextResponse.json({ error: "Game not found" }, { status: 404 });
-    }
-
     // Ensure the ID matches
     if (updatedGame.id !== gameId) {
       return NextResponse.json({ error: "Game ID mismatch" }, { status: 400 });
     }
 
-    // Update the game without modifying the date format
-    games[gameIndex] = updatedGame;
-
-    // Save updated games
-    await saveGames(games);
+    // Update the game and player statistics
+    await updateGame(gameId, updatedGame);
 
     return NextResponse.json(updatedGame);
   } catch (error) {
@@ -110,6 +97,29 @@ export async function DELETE(
     console.error("Error deleting game:", error);
     return NextResponse.json(
       { error: "Failed to delete game" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(
+  request: Request,
+  { params }: { params: { gameId: string } }
+) {
+  try {
+    const gameId = params.gameId;
+    const games = await getGames();
+    const game = games.find((g) => g.id === gameId);
+
+    if (!game) {
+      return NextResponse.json({ error: "Game not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(game);
+  } catch (error) {
+    console.error("Error fetching game:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch game" },
       { status: 500 }
     );
   }

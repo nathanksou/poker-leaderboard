@@ -74,7 +74,22 @@ export const useGameData = () => {
       gameId: string;
       formData: GameFormData;
     }) => {
-      const gameData: Omit<Game, "id" | "date"> = {
+      console.log("Starting edit game mutation for:", gameId);
+      console.log("Form data:", formData);
+
+      // Fetch the latest game data
+      const response = await fetch(`/api/games/${gameId}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to fetch game:", errorData);
+        throw new Error(errorData.error || "Failed to fetch game data");
+      }
+      const existingGame: Game = await response.json();
+      console.log("Existing game:", existingGame);
+
+      const gameData: Game = {
+        id: existingGame.id,
+        date: existingGame.date,
         firstPlace: formData.firstPlace,
         secondPlace: formData.secondPlace,
         players: formData.players.map((player) => ({
@@ -87,8 +102,9 @@ export const useGameData = () => {
               : "other",
         })),
       };
+      console.log("Sending updated game data:", gameData);
 
-      const response = await fetch(`/api/games/${gameId}`, {
+      const updateResponse = await fetch(`/api/games/${gameId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -96,12 +112,15 @@ export const useGameData = () => {
         body: JSON.stringify(gameData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!updateResponse.ok) {
+        const errorData = await updateResponse.json();
+        console.error("Failed to update game:", errorData);
         throw new Error(errorData.error || "Failed to edit game");
       }
 
-      return response.json();
+      const updatedGame = await updateResponse.json();
+      console.log("Game updated successfully:", updatedGame);
+      return updatedGame;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["games"] });

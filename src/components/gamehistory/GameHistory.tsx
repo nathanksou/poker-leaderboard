@@ -14,8 +14,10 @@ import {
 } from "@mui/material";
 import { useGameData } from "@/hooks/useGameData";
 import { GameHistoryRow } from "./GameHistoryRow";
+import { GameDialog } from "./GameDialog";
 import { compareDates } from "@/utils/sorting";
 import { PageHeader } from "@/components";
+import { Game } from "@/types";
 import {
   tableContainerStyles,
   headerCellStyles,
@@ -33,6 +35,14 @@ export const GameHistory: FC<GameHistoryProps> = ({ isAdmin = false }) => {
   const sortedGames = useMemo(() => {
     return [...games].sort((a, b) => compareDates(a.date, b.date, "desc"));
   }, [games]);
+
+  const selectedGame = useMemo(() => {
+    return games.find((game: Game) => game.id === selectedGameId);
+  }, [games, selectedGameId]);
+
+  const handleCloseEdit = () => {
+    setSelectedGameId(null);
+  };
 
   if (isLoading) {
     return (
@@ -103,6 +113,12 @@ export const GameHistory: FC<GameHistoryProps> = ({ isAdmin = false }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <GameDialog
+        open={!!selectedGame}
+        onClose={handleCloseEdit}
+        game={selectedGame}
+      />
     </PageHeader>
   );
 };
