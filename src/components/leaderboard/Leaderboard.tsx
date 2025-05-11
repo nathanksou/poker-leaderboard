@@ -15,6 +15,7 @@ import { tableContainerStyles } from "@/styles/table";
 import { useSorting } from "@/hooks/useSorting";
 import { useGameData } from "@/hooks/useGameData";
 import { Player } from "@/types";
+import { getPlayerRank } from "@/utils/ranking";
 
 export const Leaderboard: FC = () => {
   const { players, isLoading, error } = useGameData();
@@ -68,11 +69,11 @@ export const Leaderboard: FC = () => {
             onSort={handleSort}
           />
           <TableBody>
-            {sortedItems.map((player, index) => (
+            {sortedItems.map((player) => (
               <LeaderboardPlayerRow
                 key={player.slackId}
                 player={player}
-                rank={index}
+                rank={getPlayerRank(player, playersArray)}
               />
             ))}
           </TableBody>
