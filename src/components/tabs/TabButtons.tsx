@@ -13,15 +13,22 @@ type TabButtonProps = {
   label: string;
   icon: string;
   onClick: () => void;
+  isSelected: boolean;
 };
 
-const TabButton: React.FC<TabButtonProps> = ({ label, icon, onClick }) => (
+const TabButton: React.FC<TabButtonProps> = ({
+  label,
+  icon,
+  onClick,
+  isSelected,
+}) => (
   <Button
     variant="contained"
     onClick={onClick}
     sx={{
       ...tabButtonStyles,
       color: "white",
+      bgcolor: isSelected ? "#2d2d2d" : "#404040",
     }}
   >
     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -45,11 +52,13 @@ export const TabButtons: React.FC<TabButtonsProps> = ({
       label="Leaderboard"
       icon="🏆"
       onClick={() => onTabChange(TABS.LEADERBOARD)}
+      isSelected={selectedTab === TABS.LEADERBOARD}
     />
     <TabButton
       label="History"
       icon="📜"
       onClick={() => onTabChange(TABS.HISTORY)}
+      isSelected={selectedTab === TABS.HISTORY}
     />
   </Box>
 );
