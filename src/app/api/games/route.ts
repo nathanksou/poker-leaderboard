@@ -1,9 +1,9 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { readData } from "@/lib/storage";
 import { Game, ErrorResponse } from "@/types";
 import { getGames, saveGames } from "@/utils/games";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const data = await readData();
 
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const game: Game = await request.json();
 
