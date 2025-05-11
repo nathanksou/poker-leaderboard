@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { readData } from "@/lib/storage";
 import { Game, ErrorResponse } from "@/types";
 import { getGames, saveGames } from "@/utils/games";
@@ -20,7 +20,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const game: Game = await request.json();
 
