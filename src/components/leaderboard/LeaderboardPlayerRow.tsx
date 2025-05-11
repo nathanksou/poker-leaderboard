@@ -23,7 +23,6 @@ export const LeaderboardPlayerRow = ({
 
   return (
     <TableRow sx={tableRowStyles}>
-      <TableCell align="center">{rank + 1}</TableCell>
       <TableCell align="center">{player.name}</TableCell>
       <TableCell align="center">{player.gamesPlayed}</TableCell>
       <TableCell align="center">{player.firstPlace}</TableCell>

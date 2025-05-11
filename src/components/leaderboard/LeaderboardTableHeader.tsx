@@ -13,8 +13,7 @@ type LeaderboardTableHeaderProps = {
   onSort: (property: SortField) => void;
 };
 
-const columns: Array<{ field: SortField | "rank"; label: string }> = [
-  { field: "rank", label: "Rank" },
+const columns: Array<{ field: SortField; label: string }> = [
   { field: "name", label: "Player" },
   { field: "gamesPlayed", label: "Games Played" },
   { field: "firstPlace", label: "1st Place" },

@@ -25,19 +25,28 @@ export const useSorting = ({ items, defaultOrderBy }: UseSortingProps) => {
         return order === "asc" ? scoreA - scoreB : scoreB - scoreA;
       }
 
-      const aValue = a[orderBy];
-      const bValue = b[orderBy];
-
       // Handle string values (name)
       if (orderBy === "name") {
         return order === "asc"
-          ? aValue.toString().localeCompare(bValue.toString())
-          : bValue.toString().localeCompare(aValue.toString());
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
       }
 
       // Handle numeric values (gamesPlayed, firstPlace, secondPlace, buyIns)
-      const numA = Number(aValue);
-      const numB = Number(bValue);
+      const numA =
+        a[
+          orderBy as keyof Pick<
+            Player,
+            "gamesPlayed" | "firstPlace" | "secondPlace" | "buyIns"
+          >
+        ];
+      const numB =
+        b[
+          orderBy as keyof Pick<
+            Player,
+            "gamesPlayed" | "firstPlace" | "secondPlace" | "buyIns"
+          >
+        ];
       return order === "asc" ? numA - numB : numB - numA;
     });
   }, [items, order, orderBy]);
