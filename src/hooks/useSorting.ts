@@ -28,15 +28,17 @@ export const useSorting = ({ items, defaultOrderBy }: UseSortingProps) => {
       const aValue = a[orderBy];
       const bValue = b[orderBy];
 
-      if (typeof aValue === "string" && typeof bValue === "string") {
+      // Handle string values (name)
+      if (orderBy === "name") {
         return order === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
+          ? aValue.toString().localeCompare(bValue.toString())
+          : bValue.toString().localeCompare(aValue.toString());
       }
 
-      return order === "asc"
-        ? (aValue as number) - (bValue as number)
-        : (bValue as number) - (aValue as number);
+      // Handle numeric values (gamesPlayed, firstPlace, secondPlace, buyIns)
+      const numA = Number(aValue);
+      const numB = Number(bValue);
+      return order === "asc" ? numA - numB : numB - numA;
     });
   }, [items, order, orderBy]);
 

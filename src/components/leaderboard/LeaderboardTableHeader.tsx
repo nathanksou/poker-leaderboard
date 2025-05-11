@@ -14,6 +14,8 @@ type LeaderboardTableHeaderProps = {
 };
 
 const columns: Array<{ field: SortField; label: string }> = [
+  { field: "rank", label: "Rank" },
+  { field: "name", label: "Player" },
   { field: "gamesPlayed", label: "Games Played" },
   { field: "firstPlace", label: "1st Place" },
   { field: "secondPlace", label: "2nd Place" },
@@ -29,12 +31,6 @@ export const LeaderboardTableHeader: React.FC<LeaderboardTableHeaderProps> = ({
   return (
     <TableHead>
       <TableRow sx={headerRowStyles}>
-        <TableCell sx={headerCellStyles} align="center">
-          Rank
-        </TableCell>
-        <TableCell sx={headerCellStyles} align="center">
-          Player
-        </TableCell>
         {columns.map(({ field, label }) => (
           <TableCell key={field} align="center" sx={headerCellStyles}>
             <TableSortLabel
