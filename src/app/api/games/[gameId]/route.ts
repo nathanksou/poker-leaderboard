@@ -4,10 +4,10 @@ import { getGames, saveGames, updateGame } from "@/utils/games";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { gameId: string } }
+  context: { params: { gameId: string } }
 ) {
   try {
-    const gameId = params.gameId;
+    const gameId = context.params.gameId;
     const updatedGame: Game = await request.json();
 
     // Validate required fields
@@ -72,10 +72,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { gameId: string } }
+  context: { params: { gameId: string } }
 ) {
   try {
-    const gameId = params.gameId;
+    const gameId = context.params.gameId;
 
     // Get existing games
     const games = await getGames();
@@ -104,10 +104,10 @@ export async function DELETE(
 
 export async function GET(
   request: Request,
-  { params }: { params: { gameId: string } }
+  context: { params: { gameId: string } }
 ) {
   try {
-    const gameId = params.gameId;
+    const gameId = context.params.gameId;
     const games = await getGames();
     const game = games.find((g) => g.id === gameId);
 
