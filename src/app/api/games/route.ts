@@ -3,7 +3,7 @@ import { readData } from "@/lib/storage";
 import { Game, ErrorResponse } from "@/types";
 import { getGames, saveGames } from "@/utils/games";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const data = await readData();
 

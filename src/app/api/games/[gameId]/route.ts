@@ -2,15 +2,12 @@ import { NextResponse, NextRequest } from "next/server";
 import { Game } from "@/types";
 import { getGames, saveGames, updateGame } from "@/utils/games";
 
-type RouteContext = {
-  params: {
-    gameId: string;
-  };
-};
-
-export async function PUT(request: NextRequest, { params }: RouteContext) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ gameId: string }> }
+) {
   try {
-    const gameId = params.gameId;
+    const { gameId } = await params;
     const updatedGame: Game = await request.json();
 
     // Validate required fields
@@ -73,9 +70,12 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteContext) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ gameId: string }> }
+) {
   try {
-    const gameId = params.gameId;
+    const { gameId } = await params;
 
     // Get existing games
     const games = await getGames();
@@ -102,9 +102,12 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
   }
 }
 
-export async function GET(request: NextRequest, { params }: RouteContext) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ gameId: string }> }
+) {
   try {
-    const gameId = params.gameId;
+    const { gameId } = await params;
     const games = await getGames();
     const game = games.find((g) => g.id === gameId);
 
