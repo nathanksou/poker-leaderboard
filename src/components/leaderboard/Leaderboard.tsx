@@ -17,23 +17,19 @@ import { useGameData } from "@/hooks/useGameData";
 import { Player } from "@/types";
 
 export const Leaderboard: FC = () => {
-  const { players, isLoading, isError, error } = useGameData();
+  const { players, isLoading, error } = useGameData();
 
   const playersArray = useMemo(() => {
-    return Object.entries(players).map(
-      ([
+    return Object.entries(players as Record<string, Player>).map(
+      ([slackId, player]) => ({
         slackId,
-        { name, gamesPlayed, firstPlace, secondPlace, buyIns, lastUpdated },
-      ]) =>
-        ({
-          slackId,
-          name,
-          gamesPlayed,
-          firstPlace,
-          secondPlace,
-          buyIns,
-          lastUpdated,
-        } as Player)
+        name: player.name,
+        gamesPlayed: player.gamesPlayed,
+        firstPlace: player.firstPlace,
+        secondPlace: player.secondPlace,
+        buyIns: player.buyIns,
+        lastUpdated: player.lastUpdated,
+      })
     );
   }, [players]);
 
@@ -52,11 +48,11 @@ export const Leaderboard: FC = () => {
     );
   }
 
-  if (isError) {
+  if (error) {
     return (
       <PageHeader title="Poker Leaderboard">
         <Alert severity="error">
-          {error?.message || "An error occurred while loading the leaderboard"}
+          {error.message || "An error occurred while loading the leaderboard"}
         </Alert>
       </PageHeader>
     );
